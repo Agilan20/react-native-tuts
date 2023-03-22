@@ -1,28 +1,58 @@
 
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 
 export default function App() {
 
   const [name, setName] = useState("Agilan");
+  const [age, setAge] = useState(19);
   const [showDesp, setShowDesp] = useState(false)
 
-  const changeDescription = () => {
-    setShowDesp(!showDesp)
+  const showDescription = () => {
+    setShowDesp(true)
   }
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text>Hello {name}</Text>
-      </View>
       {
         showDesp &&
         <View style={styles.header}>
-          <Text>Enthusiastic student fro IST dept</Text>
+          <Text>I am {name} and I am {age} years old.</Text>
         </View>
       }
+      <TextInput
+        style={styles.input}
+        placeholder='Name'
+        multiline
+        onChangeText={(val) => {
+          if (showDesp) setShowDesp(false)
+          setName(val)
+        }
+        }
+      />
+      <TextInput
+        keyboardType='numeric'
+        style={styles.input}
+        placeholder='Age'
+        onChangeText={
+          (val) => {
+            if (showDesp) setShowDesp(false)
+            setAge(val)
+          }
+        }
+      />
       <View style={styles.body}>
-        <Button title={!showDesp ? "Show Description" : "Hide Description"} onPress={changeDescription} />
+        {
+          showDesp ?
+            <Button
+              title="Submit"
+              disabled
+            />
+            :
+            <Button
+              title="Submit"
+              onPress={showDescription}
+            />
+        }
       </View>
     </View>
   );
@@ -42,6 +72,14 @@ const styles = StyleSheet.create({
   },
   body: {
     marginTop: 20,
+  },
+  input: {
+    padding: 10,
+    marginTop: 20,
+    borderWidth: 1,
+    borderBottomColor: "black",
+    width: 200,
+    height: 40,
   },
 
 
