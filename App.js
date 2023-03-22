@@ -1,60 +1,51 @@
 
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView } from 'react-native';
 
 export default function App() {
 
-  const [name, setName] = useState("Agilan");
-  const [age, setAge] = useState(19);
-  const [showDesp, setShowDesp] = useState(false)
+  const [name, setName] = useState([
+    { person: "Agilan", key: 1 },
+    { person: "Agilan", key: 2 },
+    { person: "Agilan", key: 3 },
+    { person: "Agilan", key: 4 },
+    { person: "Agilan", key: 5 },
+    { person: "Agilan", key: 6 },
+    { person: "Agilan", key: 7 },
+    { person: "Agilan", key: 8 },
+  ]);
 
   const showDescription = () => {
     setShowDesp(true)
   }
   return (
-    <View style={styles.container}>
-      {
-        showDesp &&
-        <View style={styles.header}>
-          <Text>I am {name} and I am {age} years old.</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View>
+          <Text style={styles.title}>List of names</Text>
         </View>
-      }
-      <TextInput
-        style={styles.input}
-        placeholder='Name'
-        multiline
-        onChangeText={(val) => {
-          if (showDesp) setShowDesp(false)
-          setName(val)
-        }
-        }
-      />
-      <TextInput
-        keyboardType='numeric'
-        style={styles.input}
-        placeholder='Age'
-        onChangeText={
-          (val) => {
-            if (showDesp) setShowDesp(false)
-            setAge(val)
+        <View style={styles.body}>
+          {
+            name.map((item) => {
+              return (
+                <View style={styles.nameBox} key={item.key}>
+                  <Text style={styles.title}>{item.person}</Text>
+                </View>
+              )
+            }
+            )
           }
-        }
-      />
-      <View style={styles.body}>
-        {
-          showDesp ?
-            <Button
-              title="Submit"
-              disabled
-            />
-            :
-            <Button
-              title="Submit"
-              onPress={showDescription}
-            />
-        }
+        </View>
       </View>
-    </View>
+    </ScrollView>
+
+//  <FlatList
+// data={people}
+// renderItem=[(1) item }) => (
+//    <Text style=(styles. item}>{item. name)</Text> 
+//   )
+//   />
+
   );
 }
 
@@ -62,25 +53,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  header: {
-  },
-  boldText: {
-    fontWeight: "bold",
+    paddingTop:40,
+    paddingHorizontal:10,
   },
   body: {
-    marginTop: 20,
+    padding: 20,
   },
-  input: {
-    padding: 10,
-    marginTop: 20,
-    borderWidth: 1,
-    borderBottomColor: "black",
-    width: 200,
-    height: 40,
-  },
+  nameBox: {
+    padding: 30,
+    backgroundColor: "pink",
+    marginTop: 24,
 
+  }
 
 });
