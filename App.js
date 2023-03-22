@@ -1,13 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native';
+
+import { useState } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default function App() {
+
+  const [name, setName] = useState("Agilan");
+  const [showDesp, setShowDesp] = useState(false)
+
+  const changeDescription = () => {
+    setShowDesp(!showDesp)
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.boldText}>Hello Agilan</Text>
+        <Text>Hello {name}</Text>
       </View>
+      {
+        showDesp &&
+        <View style={styles.header}>
+          <Text>Enthusiastic student fro IST dept</Text>
+        </View>
+      }
       <View style={styles.body}>
-        <Text style={styles.boldText}>Enthusiastic Student from the dept of IST</Text>
+        <Button title={!showDesp ? "Show Description" : "Hide Description"} onPress={changeDescription} />
       </View>
     </View>
   );
@@ -21,16 +36,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    backgroundColor: "pink",
-    padding: 20,
   },
   boldText: {
     fontWeight: "bold",
   },
   body: {
-    marginTop: 10,
-    backgroundColor: "yellow",
-    padding: 20,
+    marginTop: 20,
   },
 
 
