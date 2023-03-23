@@ -1,86 +1,72 @@
 
-import { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import * as Font from 'expo-font';
+import * as SplashScreen from "expo-splash-screen";
 
+
+//keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync()
 export default function App() {
-
-  const [name, setName] = useState("Agilan");
-  const [age, setAge] = useState(19);
-  const [showDesp, setShowDesp] = useState(false)
-
-  const showDescription = () => {
-    setShowDesp(true)
-  }
-  return (
-    <View style={styles.container}>
-      {
-        showDesp &&
-        <View style={styles.header}>
-          <Text>I am {name} and I am {age} years old.</Text>
-        </View>
+  const [appIsReady, setAppIsReady] = useState(false);
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load fonts
+        await Font.loadAsync({
+          'Montserrat-regular': require('./assets/fonts/Montserrat-Regular.ttf'),
+          'Montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+        });
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
       }
-      <TextInput
-        style={styles.input}
-        placeholder='Name'
-        multiline
-        onChangeText={(val) => {
-          if (showDesp) setShowDesp(false)
-          setName(val)
-        }
-        }
-      />
-      <TextInput
-        keyboardType='numeric'
-        style={styles.input}
-        placeholder='Age'
-        onChangeText={
-          (val) => {
-            if (showDesp) setShowDesp(false)
-            setAge(val)
-          }
-        }
-      />
-      <View style={styles.body}>
-        {
-          showDesp ?
-            <Button
-              title="Submit"
-              disabled
-            />
-            :
-            <Button
-              title="Submit"
-              onPress={showDescription}
-            />
-        }
-      </View>
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+  return (
+    <View style={styles.container} onLayout={onLayoutRootView}>
+      <Text style={styles.header}>
+        Hello Agilan
+      </Text>
+      <Text style={styles.body}>
+        An enthusisatic student from the department of information science and Technology
+      </Text>
     </View>
   );
-}
 
+
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center'
   },
   header: {
-  },
-  boldText: {
-    fontWeight: "bold",
+    fontFamily: 'Montserrat-bold',
+    fontSize: 20,
   },
   body: {
-    marginTop: 20,
-  },
-  input: {
+    fontFamily: 'Montserrat-regular',
+    fontSize: 15,
     padding: 10,
-    marginTop: 20,
-    borderWidth: 1,
-    borderBottomColor: "black",
-    width: 200,
-    height: 40,
-  },
-
-
-});
+    alignContent: 'center',
+    justifyContent: 'center',
+    textAlign:'center'
+  }
+})
